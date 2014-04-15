@@ -1,6 +1,6 @@
-=======
-knife
-=======
+===========
+Chef Solo
+===========
 
 knife-soloとは
 ================
@@ -89,14 +89,17 @@ Edit JSON(Node Object)
     "nginx": {
       "port" : 80
   },
-  "run_list":[
-    "nginx"
-  ]
-}
+    "run_list":[
+      "nginx"
+    ]
+  }
 
 
 Install community cookbook
 ============================
+
+* `Opscode Community <http://community.opscode.com/cookbooks>`__ にユーザー登録/ログインする
+* "Get a new private key"から秘密鍵をダウンロードする
 
 ::
 

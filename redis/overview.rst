@@ -5,9 +5,10 @@ Overview
 Redisとは
 ===========
 
-* C言語で実装されているKVS(Key-Value Store)
-* 2009年リリース
+* インメモリKVS(Key-Value Store)
 * Salvatore SanfilippoとPieter Noordhuisを中心に開発
+* C言語で実装されている
+* 2009年リリース
 
 
 KVSの特徴
@@ -20,16 +21,18 @@ KVSの特徴
 
 Redisの特徴
 =============
-* 多彩な5つのデータ型
+* 5種類のデータ型
 
-  * Strings
-  * Lists
-  * Sets
-  * Hashes
-  * Sorted Sets
+  * String
+  * List
+  * Set
+  * Hash
+  * Sorted Set
 
 * インメモリで高速化 + ディスクに書き出しで永続化
+
+  * スナップショット
+  * 追記専用ファイル
+
 * レプリケーション対応
 * Pub/Sub対応
-* バイナリデータも格納できる
-* 豊富なクライアントライブラリ

@@ -8,4 +8,5 @@ Chef
   overview
   install
   resource
-  knife
+  solo
+  opscode

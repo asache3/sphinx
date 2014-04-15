@@ -56,6 +56,15 @@ Provisioning
 Chef Solo
 -----------
 
+::
+
+  config.vm.provision :chef_solo do |chef|
+    chef.cookbooks_path = "cookbooks"
+    chef.run_list = [
+      "recipe[ENV_NAME]",
+    ]
+  end
+
 
 Chef Server
 -------------

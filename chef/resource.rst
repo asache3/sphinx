@@ -142,12 +142,29 @@ User
 Cookbook File
 ===============
 
+* クックブック内に置いたファイルをノードへ転送する
+
 ::
 
   cookbook_file "/tmp/supervisor-3.0a12-2.el6.noarch.rpm" do
     mode 00644
   end
   # files/default/supervisor-3.0a12-2.el6.noarch.rpmというファイルが/tmp以下に転送される
+
+
+File
+======
+
+* ノード上のファイルを直接扱う
+
+::
+
+  file "/tmp/something" do
+    owner "root"
+    group "root"
+    mode 00755
+    action :create
+  end
 
 
 Directory
@@ -163,6 +180,106 @@ Directory
     mode   '0755'
     action :create # 削除する場合は:delete
   end
+
+
+Mount
+=======
+
+* ファイルシステムのマウントを管理する
+
+::
+
+  mount "/mnt/volume1" do
+    device "volume1"
+    device_type :label
+    fstype "xfs"
+    options "rw"
+  end
+
+
+GIt
+=====
+
+* gitレポジトリからファイルを取ってくる
+
+::
+
+  git "/home/vagrant/.oh-my-zsh" do
+    repository "git://github.com/robbyrussell/oh-my-zsh.git"
+    reference "master"
+    action :checkout # gitからファイルをチェックアウトするのは初回のみ(毎回レポジトリを更新したい場合は:sync)
+    user "fiorung"
+    group "xenoblade"
+  end 
+
+
+Script(bash)
+==============
+
+* リソース内に定義したシェルスクリプトなどのスクリプトをroot権限で実行する
+
+::
+
+  bash "install perlbrew" do
+    user 'vagrant'
+    group 'vagrant'
+    cwd '/home/vagrant'
+    environment "HOME" => '/home/vagrant' # 環境変数を設定する
+    code <<-EOC
+      curl -kL http://install.perlbrew.pl | bash
+    EOC
+    creates "/home/vagrant/perl5/perlbrew/bin/perlbrew" # ファイルを作成することを指示し、既にファイルがある場合はコマンドを実行しないことを指定する
+  end
+
+not_if, only_if
+-----------------
+
+* not_if: 指定した条件が真でないならコマンドを実行する
+* only_if: 指定した条件が真のときのみコマンドを実行する
+
+::
+
+  bash "install-rubybuild" do
+    not_if 'which ruby-build'
+    code <<-EOC
+      cd /tmp/ruby-build
+      ./install.sh
+    EOC
+  end
+ 
+
+Role
+======
+
+* run_listやAttributeをノードの役割ごとにグループ化する
+
+roles/webserver.json
+
+::
+
+  {
+    "name": "webserver",
+    "default_attributes": {},
+    "override_attributes": {},
+    "json_class": "Chef::Role",
+    "description": "",
+    "chef_type": "role",
+    "run_list": [
+      "recipe[yum::epel]",
+      "recipe[nginx]",
+      "recipe[sysstat]"
+    ]
+  }
+
+nodes/melody.json
+
+::
+
+  {
+    "run_list":[
+      "role[webserver]"
+    ]
+  }
 
 
 Reference

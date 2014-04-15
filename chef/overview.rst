@@ -24,10 +24,23 @@ Chef ServerとChef Solo
     * Opscode社がSaaSとして提供しているHosted Chef
     * OSSによる配布版
 
+  * Chef Soloでレポジトリに保存していた情報などをサーバーサイドのデータベースとして管理する
+  * 各ノードはインストールされたChef Clientを通じてChef Serverからデータを取得し、必要ならレシピを実行して自分自身の状態を変更する
+  * JSON over HTTPSでChef Client→Chef ServerへのPULL型のアーキテクチャ
+  * Chef ServerではChef ClientからのHTTPリクエストを待ち受けるためにnginxとErlangで書かれたerchefというサービスが起動している
+  * Chef Soloにはない機能
+
+    * Ohaiが収集する様々なノードの情報を軸に、Chef Serverに登録された全ノードを検索することができる
+    * ノード群に配布する各種ファイルをサーバーに蓄積しておくことができる
+    * ブラウザからノードを管理するUIが提供される
+
 * Chef Solo
 
   * サーバーを必要とせず、単独のコマンドとしてChefを実行する
   * Chef Server + Chef Clientのサブセット
+  * 管理対象のサーバーでchef-soloコマンドを叩いてローカルに保存されたレシピを実行する
+  * knife-soloを使うとリモートへのレシピ転送とssh経由でのコマンドを実行を行う
+  * 裏側ではレシピがノードのローカルにあってそれをchef-soloが実行している
 
 
 レポジトリ(キッチン)、クックブック、レシピ
@@ -56,31 +69,3 @@ Chef ServerとChef Solo
 
 * Chefを実行し終わった後のサーバーの状態は同一であることを保証する
 
-
-Resource
-==========
-
-* レシピ内で使う、サーバーの状態に影響を与える命令
-
-Log
------
-
-* Chefのログを操作する
-
-
-Package
----------
-
-* パッケージの状態を記述する
-
-
-Service
----------
-
-* サービスを操作する
-
-
-Template
-----------
-
-* テンプレートが展開されて設定ファイルが配置される
